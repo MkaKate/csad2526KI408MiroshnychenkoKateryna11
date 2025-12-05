@@ -1,0 +1,10 @@
+Create a new file named `main.cpp` and write a minimal C++ program that prints "Hello World" to the console. Use standard C++ conventions and include the necessary headers.
+
+
+Copilot said:
+#include <iostream>
+
+int main() {
+    std::cout << "Hello World" << std::endl;
+    return 0;
+}
