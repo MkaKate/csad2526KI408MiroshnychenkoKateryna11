@@ -1,0 +1,76 @@
+Please generate the following for my C++ project:
+1. Create a testing module:
+Create two new files in the project root: math_operations.h and math_operations.cpp.
+In math_operations.h, write a function declaration int add(int a, int b);.
+In math_operations.cpp, implement this function.
+2. Create unit tests:
+Create a new directory named tests.
+Inside it, create a file unit_tests.cpp.
+Write unit tests for the add() function using Google Test.
+3. Update CMakeLists.txt:
+Add Google Test support to the project (including FetchContent or another recommended method).
+Add instructions to build a test executable from the test files.
+Add commands to enable testing and automatically run the tests.
+Please generate all required code.
+
+Copilot said:
+math_operations.h
+#pragma once
+int add(int a, int b);
+
+math_operations.cpp
+#include "math_operations.h"
+
+int add(int a, int b) {
+    return a + b;
+}
+
+unit_tests.cpp
+#include <gtest/gtest.h>
+#include "../math_operations.h"
+
+TEST(MathOperationsTest, Add_TwoPositiveNumbers) {
+    EXPECT_EQ(add(2, 3), 5);
+}
+
+TEST(MathOperationsTest, Add_NegativeAndPositive) {
+    EXPECT_EQ(add(-1, 5), 4);
+}
+
+TEST(MathOperationsTest, Add_Zero) {
+    EXPECT_EQ(add(0, 0), 0);
+    EXPECT_EQ(add(0, 10), 10);
+}
+
+TEST(MathOperationsTest, Add_TwoNegatives) {
+    EXPECT_EQ(add(-3, -7), -10);
+}
+
+CMakeLists.txt
+cmake_minimum_required(VERSION 3.14)
+project(MathProject CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Main library
+add_library(math_operations math_operations.cpp)
+
+# GoogleTest
+include(FetchContent)
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/release-1.14.0.zip
+)
+# For Windows: Prevent overriding the parent project's compiler/linker settings.
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+
+enable_testing()
+
+# Unit tests executable
+add_executable(unit_tests tests/unit_tests.cpp)
+target_link_libraries(unit_tests PRIVATE math_operations gtest_main)
+
+include(GoogleTest)
+gtest_discover_tests(unit_tests)
