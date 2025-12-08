@@ -28,8 +28,8 @@ jobs:
 
       - name: Configure and Build
         run: |
-          chmod +x ./build_stage3.sh
-          ./build_stage3.sh
+          chmod +x ./ci.sh
+          ./ci.sh
         shell: bash
 
       - name: Deploy
