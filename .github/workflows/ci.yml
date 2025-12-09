@@ -12,25 +12,41 @@ on:
 
 jobs:
   cross_build:
-    name: Cross-platform Build
-    runs-on: ${{ matrix.os }}
+    name: cross_build
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-
+    runs-on: ${{ matrix.os }}
     steps:
-      - name: Check out repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install CMake (if required)
-        if: ${{ matrix.os == 'ubuntu-latest' || matrix.os == 'windows-latest' }}
-        uses: jwlawson/actions-setup-cmake@v1
+      - name: Install CMake on Linux
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake
 
-      - name: Configure and Build
-  run: |
-    chmod +x ./ci.sh
-    ./ci.sh
-  shell: bash
+      - name: Install CMake on macOS
+        if: matrix.os == 'macos-latest'
+        run: |
+          brew update
+          brew install cmake
 
-      - name: Deploy
-        run: echo "Deploying artifacts..."
+      - name: Install CMake on Windows
+        if: matrix.os == 'windows-latest'
+        shell: powershell
+        run: |
+          choco install -y cmake --installargs '"ADD_CMAKE_TO_PATH=System"'
+
+      - name: Configure
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: |
+          cmake --build build --config Release --parallel
+
+      - name: Deploy (placeholder)
+        run: |
+          echo "Deploy step placeholder - implement deployment here"
