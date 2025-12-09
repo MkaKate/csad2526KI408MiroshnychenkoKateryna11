@@ -4,18 +4,19 @@ project(HelloWorld LANGUAGES CXX)
 # -----------------------------
 # 1. Compiler settings
 # -----------------------------
-set(CMAKE_CXX_STANDARD 17) # Рекомендую перейти на 17 або вище
+# Рекомендовано C++17 або вище для сучасних проектів
+set(CMAKE_CXX_STANDARD 17) 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # -----------------------------
 # 2. Shared Library (Спільний код)
 # -----------------------------
-# Створюємо статичну бібліотеку для коду, який використовуватимуть і застосунок, і тести.
+# Створюємо статичну бібліотеку для 'math_operations.cpp'
 add_library(MathOps STATIC
     math_operations.cpp
 )
-# Додаємо поточну директорію для заголовків, якщо вони будуть.
+# Додаємо поточну директорію для заголовків, які можуть використовуватись ззовні
 target_include_directories(MathOps PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 
@@ -25,7 +26,7 @@ target_include_directories(MathOps PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 add_executable(hello
     src/main.cpp
 )
-# Лінкуємо застосунок до спільної бібліотеки
+# Лінкуємо основний застосунок до бібліотеки
 target_link_libraries(hello PRIVATE MathOps)
 
 
@@ -37,7 +38,8 @@ include(FetchContent)
 FetchContent_Declare(
   googletest
   URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
-  DOWNLOAD_EXTRACT_TIMESTAMP true # Виправлення попередження CMake
+  # Виправлення попередження CMake про часову мітку (DOWNLOAD_EXTRACT_TIMESTAMP)
+  DOWNLOAD_EXTRACT_TIMESTAMP true 
 )
 
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
@@ -48,7 +50,6 @@ enable_testing()
 # -----------------------------
 # 5. Unit tests
 # -----------------------------
-# Опція, щоб увімкнути/вимкнути збірку тестів (залишаємо як було)
 option(BUILD_TESTS "Build unit tests" ON)
 
 if(BUILD_TESTS)
@@ -57,7 +58,7 @@ if(BUILD_TESTS)
       tests/unit_tests.cpp
   )
 
-  # Лінкуємо тести до спільної бібліотеки MathOps та GoogleTest
+  # Лінкуємо тести до спільної бібліотеки MathOps та GTest
   target_link_libraries(unit_tests PRIVATE MathOps GTest::gtest_main)
   
   # Додаємо тест до системи CTest
