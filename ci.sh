@@ -1,21 +1,19 @@
 #!/usr/bin/env bash
-set -e
+# build.sh — configure, build and run tests for the project
+set -euo pipefail
 
-# Create build directory
+# Create and enter build directory
 mkdir -p build
-
-# Change into the build directory
 cd build
 
-# Configure the project using CMake
+# Configure the project (adjust -DCMAKE_BUILD_TYPE if needed)
 cmake ..
 
 # Build the project
 cmake --build .
 
-# Run tests using CTest
-ctest
+# Run tests via CTest and show output on failure
+ctest --output-on-failure
 
-# Go back to the project root and ensure this script is executable (if not already)
+# Exit back to repo root (optional)
 cd ..
-chmod +x ci.sh
