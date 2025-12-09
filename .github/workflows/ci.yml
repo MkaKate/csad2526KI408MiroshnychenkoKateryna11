@@ -1,4 +1,4 @@
-name: CI
+name: CI Build
 
 on:
   push:
@@ -12,42 +12,53 @@ on:
 
 jobs:
   cross_build:
-    name: cross_build
+    name: Cross-platform build and test
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-
     runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install CMake on Linux
-        if: matrix.os == 'ubuntu-latest'
+      - name: Install CMake (Linux)
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y cmake
+        shell: bash
 
-      - name: Install CMake on macOS
-        if: matrix.os == 'macos-latest'
+      - name: Install CMake (macOS)
+        if: runner.os == 'macOS'
         run: |
           brew update
           brew install cmake
+        shell: bash
 
-      - name: Install CMake on Windows
-        if: matrix.os == 'windows-latest'
-        shell: powershell
+      - name: Install CMake (Windows)
+        if: runner.os == 'Windows'
+        run: choco install -y cmake --installargs '"ADD_CMAKE_TO_PATH=System"'
+        shell: cmd
+
+      - name: Configure, build and run tests (Linux / macOS)
+        if: runner.os != 'Windows'
         run: |
-          choco install -y cmake --installargs '"ADD_CMAKE_TO_PATH=System"'
+          chmod +x ./ci.sh || true
+          ./ci.sh
+        shell: bash
 
-      - name: Configure
-        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      - name: Configure, build and run tests (Windows)
+        if: runner.os == 'Windows'
+        run: .\ci.cmd Release
+        shell: cmd
 
-      - name: Build
-        run: cmake --build build --config Release --parallel
-
-      - name: Run tests
-        run: |
-          cd build
-          ctest --output-on-failure --config Release
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts-${{ matrix.os }}
+          path: |
+            build/hello
+            build/unit_tests
+            build/Release/hello.exe
+            build/Release/unit_tests.exe
