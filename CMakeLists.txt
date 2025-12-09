@@ -7,6 +7,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Collect all .cpp files from src/
-file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/*.cpp)
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS main.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
