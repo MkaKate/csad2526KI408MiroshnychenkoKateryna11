@@ -7,11 +7,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Main library
 add_library(math_operations math_operations.cpp)
 
-# GoogleTest
+# GoogleTest via Git
 include(FetchContent)
 FetchContent_Declare(
   googletest
-  URL https://github.com/google/googletest/archive/release-1.14.0.zip
+  GIT_REPOSITORY https://github.com/google/googletest.git
+  GIT_TAG release-1.14.0
 )
 # For Windows: Prevent overriding the parent project's compiler/linker settings.
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
