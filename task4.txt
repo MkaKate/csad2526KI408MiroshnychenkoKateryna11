@@ -1,0 +1,88 @@
+Create a CI script for my project.
+If the OS is Linux or macOS, generate a file named ci.sh.
+If the OS is Windows, generate ci.bat or ci.cmd.
+The script must perform the following steps:
+Create a build directory (mkdir build).
+Change into the build directory (cd build).
+Configure the project using CMake (cmake ..).
+Build the project (cmake --build .).
+Ensure the script file is executable (chmod +x build.sh) and assume the changes will be committed.
+Add a step that runs tests using CTest (ctest) and make sure this step works on all three operating systems (Linux, macOS, Windows).
+Generate a complete script with proper OS-specific syntax.
+
+Copilot said:
+Here are CI build scripts for each operating system, following your requirements:
+
+ci.sh
+#!/usr/bin/env bash
+set -e
+
+# Create build directory
+mkdir -p build
+
+# Change into the build directory
+cd build
+
+# Configure the project using CMake
+cmake ..
+
+# Build the project
+cmake --build .
+
+# Run tests using CTest
+ctest
+
+# Go back to the project root and ensure this script is executable (if not already)
+cd ..
+chmod +x ci.sh
+
+ci.bat
+@echo off
+REM Create build directory
+if not exist build mkdir build
+
+REM Change into the build directory
+cd build
+
+REM Configure the project using CMake
+cmake ..
+
+REM Build the project
+cmake --build .
+
+REM Run tests using CTest
+ctest
+
+REM Go back to project root directory
+cd ..
+
+REM (Optional) Make batch file read-only if needed (Windows has no direct equivalent to chmod +x)
+
+ci.cmd
+@echo off
+REM Create build directory
+if not exist build mkdir build
+
+REM Change into the build directory
+cd build
+
+REM Configure the project using CMake
+cmake ..
+
+REM Build the project
+cmake --build .
+
+REM Run tests using CTest
+ctest
+
+REM Go back to project root directory
+cd ..
+
+Notes:
+
+Use ci.sh for Linux and macOS.
+Use either ci.bat or ci.cmd for Windows—they are functionally equivalent in this context.
+The Linux/macOS script (ci.sh) includes chmod +x ci.sh to make itself executable.
+All scripts ensure CTest runs after building the project.
+Batch scripts have no real equivalent to chmod +x, as Windows handles executable permissions differently.
+Adjust file commits as appropriate in your CI workflow.

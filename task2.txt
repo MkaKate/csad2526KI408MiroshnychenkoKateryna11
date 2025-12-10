@@ -1,0 +1,34 @@
+Copilot Chat
+Basic CMakeLists.txt for C++ project
+You said: Create a basic CMakeLists.txt for a C++
+Create a basic CMakeLists.txt for a C++ project.
+Requirements:
+Minimum CMake version — 3.10 or newer
+Set the project name, for example ProjectName
+Enable the C++ standard no lower than C++17
+Add an executable target using source files from the src/ folder
+Add the include/ directory if needed
+Prepare the file in a format that can be directly placed in the root of the repository as CMakeLists.txt
+Generate a complete ready-to-use file.
+
+Copilot said:
+cmake_minimum_required(VERSION 3.10)
+
+# Set the project name
+project(ProjectName LANGUAGES CXX)
+
+# Set C++ standard to at least C++17
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Collect all source files in src/
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/*.cpp src/*.cxx src/*.cc)
+
+# Optionally, add the include/ directory (if it exists)
+include_directories(${PROJECT_SOURCE_DIR}/include)
+
+# Define the executable target
+add_executable(${PROJECT_NAME} ${SOURCES})
+
+This file meets all your requirements and can be used as a drop-in root-level CMakeLists.txt for most basic C++ projects.
